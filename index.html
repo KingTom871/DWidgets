@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- addons -->
+    <script src="./src/js/vue.js"></script>
+    <script src="./node_modules/vue-grid-layout/dist/vue-grid-layout.umd.min.js"></script>
+    <link rel="stylesheet" href="./node_modules/@mdi/font/css/materialdesignicons.min.css">
+    <!-- widgets -->
+    <script src="./src/widgets/countdown.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/countdown.css">
+    <script src="./src/widgets/clock.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/clock.css">
+    <script src="./src/widgets/todo.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/todo.css">
+    <script src="./src/widgets/classlist.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/classlist.css">
+    <script src="./src/widgets/timer.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/timer.css">
+    <script src="./src/widgets/music.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/music.css">
+    <script src="./src/widgets/bilicard.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/bilicard.css">
+    <script src="./src/js/register.js"></script>
+    <meta charset='UTF-8'>
+    <!-- css -->
+    <link rel="stylesheet" href="./src/css/style.css">
+    <link rel="stylesheet" href="./src/css/cards.css">
+    <link rel="stylesheet" href="./src/css/menu.css">
+</head>
+
+<body>
+    <div id="background"></div>
+    <div id="root">
+        <div id="content">
+            <!-- menu -->
+            <div id="menu">
+                <div class="menu-controls menu-move">
+                    <span class="mdi mdi-cursor-move"></span>
+                </div>
+                <div class="menu-controls" @click="reset">
+                    <span class="mdi mdi-undo-variant"></span>
+                </div>
+                <div class="menu-controls" @click="settings">
+                    <span class="mdi mdi-cog"></span>
+                </div>
+                <div class="menu-controls" @click="changelayout">
+                    <span class="mdi" :class="cl_bthstyle"></span>
+                </div>
+            </div>
+            <grid-layout :layout.sync="layout" :col-num="3" :row-height="150" :is-draggable="change_layout" :is-resizable="false" :is-mirrored="false" :vertical-compact="true" :margin="[10, 17]" :use-css-transforms="true">
+                <grid-item v-for="(item, index) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="index">
+                    <component :is="item.comments"></component>
+                </grid-item>
+            </grid-layout>
+        </div>
+    </div>
+    <script>
+        const { ipcRenderer } = require('electron')
+        const fs = require('fs')
+        const path = require('path')
+        var layoutPath = path.join(__dirname, 'data/layout.json')
+
+        //Listen(window animation)
+        ipcRenderer.on('win-animation', (event, arg) =>
+        {
+            document.body.style.opacity = arg
+        })
+        ipcRenderer.on('setMenu', (event, arg) =>
+        {
+            document.getElementById('menu').style.height = arg
+        })
+        const main = new Vue(
+        {
+            el: '#root',
+            data:
+            {
+                change_layout: false,
+                cl_bthstyle: "mdi-widgets",
+                layout: []
+            },
+            mounted()
+            {
+                this.getLayout()
+            },
+            methods:
+            {
+                changelayout()
+                {
+
+                    if (this.change_layout == false)
+                    {
+                        this.cl_bthstyle = 'mdi-widgets-outline'
+                        this.change_layout = true
+                    }
+                    else
+                    {
+                        this.cl_bthstyle = 'mdi-widgets'
+                        this.change_layout = false
+                        fs.writeFileSync(layoutPath, JSON.stringify(this.layout, null, 2))
+                    }
+                },
+                getLayout()
+                {
+                    var data = JSON.parse(fs.readFileSync(layoutPath, 'utf-8'))
+                    var layout = []
+                    for (var i = 0; i < (data).length; i++)
+                    {
+                        if (data[i].show == false)
+                        {
+                            continue
+                        }
+                        layout.push(data[i])
+                    }
+                    this.layout = layout
+                },
+                reset()
+                {
+                    ipcRenderer.send('reset', '')
+                },
+                settings()
+                {
+                    ipcRenderer.send('setting', '')
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
