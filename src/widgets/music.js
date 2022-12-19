@@ -102,11 +102,11 @@ const music = Vue.extend(
             })
         },
     },
-    watch:
-    {
-        // nowtime(newdata)
-        // {
-        //     this.$refs.audio.currentTime = newdata
-        // }
-    }
+//     watch:
+//     {
+//          nowtime(newdata)
+//          {
+//              this.$refs.audio.currentTime = newdata
+//          }
+//     }
 })
