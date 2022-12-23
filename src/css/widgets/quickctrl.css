@@ -1,0 +1,27 @@
+.quickctrlbase{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+.quickctrl-item{
+    color: #435263;
+    font-size: 2.3rem;
+    text-align: center;
+    line-height: 60px;
+    margin: 7px;
+    width: 80%;
+    height: 80%;
+    background: #B2B2B6;
+    border-radius: 50%;
+    transition: 0.15s;
+}
+
+.quickctrl-item:hover{
+    color: #fff;
+    background: #4CC2FF;    
+}
+
+.quickctrl-item:active{
+    transform: scale(0.9);
+
+}

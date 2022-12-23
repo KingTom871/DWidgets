@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='UTF-8'>
+    <script src="./src/js/vue.js"></script>
+    <link rel="stylesheet" href="./node_modules/@mdi/font/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="./node_modules/@wangeditor/editor/dist/css/style.css">
+    <script src="./node_modules/@wangeditor/editor/dist/index.js"></script>
+    <link rel="stylesheet" href="./windows/note/style.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div>
+            <div class="title">
+                <div class="title-item mdi mdi-pencil" @click="edit"></div>
+                <div class="title-item mdi mdi-refresh" @click="load"></div>
+            </div>
+            <div class="list">
+                <div class="item" v-for="(item, index) in list" :key="index" @click="view(item.path)">
+                    <span class="text-overflow">{{item.title}}</span>
+                    <span class="mdi mdi-delete" @click="remove(item.path)"></span>
+                </div>
+            </div>
+        </div>
+        <div id="editor-container" style="width: 100%;height: 100%;"></div>
+    </div>
+    <script>
+        const fs = require('fs')
+        const path = require('path')
+        const { createEditor, createToolbar } = window.wangEditor
+        const editorConfig = {
+            placeholder: '',
+        }
+        new Vue(
+        {
+            el: '.layout',
+            data:
+            {
+                list: [],
+                path: ''
+            },
+            mounted()
+            {
+                this.load()
+            },
+            methods:
+            {
+                load()
+                {
+                    var data = fs.readdirSync(path.join(__dirname, 'data/text'))
+                    var list = []
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        var template = {
+                            title: data[i],
+                            path: path.join(__dirname, 'data/text/', data[i])
+                        }
+                        list.push(template)
+                    }
+                    this.list = list
+                },
+                edit()
+                {
+                    const { ipcRenderer } = require('electron')
+                    ipcRenderer.send('note-editor', '')
+                },
+                view(path)
+                {
+                    var html = fs.readFileSync(path, 'utf-8')
+                    var editor = createEditor(
+                    {
+                        selector: '#editor-container',
+                        html: html,
+                        config: editorConfig,
+                        mode: 'default',
+                    })
+                },
+                remove(path){
+                    fs.unlinkSync(path, () => {
+                        this.load()
+                    })
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

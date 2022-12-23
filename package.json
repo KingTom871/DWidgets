@@ -1,0 +1,41 @@
+{
+    "name": "dwidgets",
+    "version": "1.1.1",
+    "description": "Desktop widgets for Windows",
+    "main": "index.js",
+    "scripts": {
+        "pack": "electron-packager ./ DWidgets --out ./dist --overwrite --icon=assets/app/favicon.ico",
+        "dist": "electron-builder --win --x64"
+    },
+    "build": {
+        "appId": "com.dwidgets.app",
+        "win": {
+            "icon": "assets/app/favicon.ico",
+            "target": [
+                "nsis",
+                "zip"
+            ]
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Yixiaoshan/Dwidgets.git"
+    },
+    "author": "Yixiaoshan",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Yixiaoshan/Dwidgets/issues"
+    },
+    "homepage": "https://github.com/Yixiaoshan/Dwidgets#readme",
+    "devDependencies": {
+        "electron": "^22.0.0",
+        "electron-packager": "^17.1.1"
+    },
+    "dependencies": {
+        "@mdi/font": "^7.1.96",
+        "@wangeditor/editor": "^5.1.23",
+        "axios": "^1.2.1",
+        "diskinfo": "^0.0.3",
+        "vue-grid-layout": "^2.4.0"
+    }
+}

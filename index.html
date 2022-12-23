@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='UTF-8'>
+    <!-- addons -->
+    <script src="./src/js/vue.js"></script>
+    <script src="./node_modules/vue-grid-layout/dist/vue-grid-layout.umd.min.js"></script>
+    <link rel="stylesheet" href="./node_modules/@mdi/font/css/materialdesignicons.min.css">
+    <!-- widgets -->
+    <!-- #region -->
+    <script src="./src/widgets/countdown.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/countdown.css">
+    <script src="./src/widgets/clock.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/clock.css">
+    <script src="./src/widgets/todo.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/todo.css">
+    <script src="./src/widgets/classlist.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/classlist.css">
+    <script src="./src/widgets/timer.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/timer.css">
+    <script src="./src/widgets/music.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/music.css">
+    <script src="./src/widgets/bilicard.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/bilicard.css">
+    <script src="./src/widgets/quickctrl.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/quickctrl.css">
+    <script src="./src/widgets/system.js"></script>
+    <link rel="stylesheet" href="./src/css/widgets/system.css">
+    <script src="./src/js/register.js"></script>
+    <!-- #endregion -->
+    <!-- css -->
+    <link rel="stylesheet" href="./src/css/style.css">
+    <link rel="stylesheet" href="./src/css/cards.css">
+    <link rel="stylesheet" href="./src/css/menu.css">
+</head>
+
+<body>
+    <div id="background"></div>
+    <div id="root">
+        <div id="content">
+            <!-- menu -->
+            <div id="menu">
+                <div class="menu-controls menu-move">
+                    <span class="mdi mdi-cursor-move"></span>
+                </div>
+                <div class="menu-controls" @click="reset">
+                    <span class="mdi mdi-undo-variant"></span>
+                </div>
+                <div class="menu-controls" @click="settings">
+                    <span class="mdi mdi-cog"></span>
+                </div>
+                <div class="menu-controls" @click="changelayout">
+                    <span class="mdi" :class="cl_bthstyle"></span>
+                </div>
+                <div class="searchbase">
+                    <svg @click="search" t="1671801004040" class="search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2694" width="200" height="200">
+                        <path d="M892.949113 131.050887c-173.763299-173.763299-456.292289-173.763299-630.055587 0C97.089979 296.854433 90.196454 562.133773 241.410639 736.963299L10.345567 968.028371c-12.731381 12.731381-12.731381 33.148041 0 45.626062a32.166268 32.166268 0 0 0 22.813031 9.553814c8.234227 0 16.44734-3.188124 22.813031-9.553814L287.036701 782.589361A443.592577 443.592577 0 0 0 578.053278 891.091134c114.075711 0 228.151423-43.504165 314.895835-130.248577 173.763299-173.499381 173.763299-456.292289 0-629.79167z m-45.626061 584.155051c-148.564454 148.564454-389.964536 148.564454-538.52899 0-148.564454-148.553897-148.564454-389.964536 0-538.52899C383.07101 102.4 480.435464 65.261526 578.053278 65.261526c97.628371 0 194.982268 37.138474 269.269774 111.415422 148.289979 148.564454 148.289979 389.964536 0 538.52899z" fill="#37455E" p-id="2695"></path>
+                    </svg>
+                    <input type="text" placeholder="Bing搜索..." v-model="searchKey" @keydown.enter="search">
+                </div>
+            </div>
+            <grid-layout :layout.sync="layout" :col-num="4" :row-height="150" :is-draggable="change_layout" :is-resizable="false" :is-mirrored="false" :vertical-compact="true" :margin="[10, 17]" :use-css-transforms="true">
+                <grid-item v-for="(item, index) in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="index">
+                    <component :is="item.comments" :style="click" v-if="item.show"></component>
+                </grid-item>
+            </grid-layout>
+        </div>
+    </div>
+    <script>
+        const { ipcRenderer, shell } = require('electron')
+        const fs = require('fs')
+        const path = require('path')
+        var layoutPath = path.join(__dirname, 'data/layout.json')
+
+        //Listen(window animation)
+        ipcRenderer.on('win-animation', (event, arg) =>
+        {
+            document.body.style.opacity = arg
+        })
+        ipcRenderer.on('setMenu', (event, arg) =>
+        {
+            document.getElementById('menu').style.height = arg
+        })
+        const main = new Vue(
+        {
+            el: '#root',
+            data:
+            {
+                change_layout: false,
+                searchKey: '',
+                click: '',
+                cl_bthstyle: "mdi-widgets",
+                layout: [
+                {
+                    "x": 0,
+                    "y": 0,
+                    "w": 1,
+                    "w_tmp": 1,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "clock",
+                    "comments": "clock",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 1,
+                    "y": 0,
+                    "w": 1,
+                    "w_tmp": 1,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "countdown",
+                    "comments": "countdown",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 0,
+                    "y": 2,
+                    "w": 2,
+                    "w_tmp": 2,
+                    "h": 2,
+                    "h_tmp": 2,
+                    "i": "todo",
+                    "comments": "todo",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 2,
+                    "y": 0,
+                    "w": 2,
+                    "w_tmp": 2,
+                    "h": 2,
+                    "h_tmp": 2,
+                    "i": "classlist",
+                    "comments": "classlist",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 2,
+                    "y": 3,
+                    "w": 2,
+                    "w_tmp": 2,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "timer",
+                    "comments": "timer",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 2,
+                    "y": 2,
+                    "w": 2,
+                    "w_tmp": 2,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "music",
+                    "comments": "music",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 0,
+                    "y": 1,
+                    "w": 2,
+                    "w_tmp": 2,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "bilicard",
+                    "comments": "bilicard",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "w": 1,
+                    "w_tmp": 1,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "quickctrl",
+                    "comments": "quickctrl",
+                    "moved": false,
+                    "show": true
+                },
+                {
+                    "x": 0,
+                    "y": 0,
+                    "w": 3,
+                    "w_tmp": 3,
+                    "h": 1,
+                    "h_tmp": 1,
+                    "i": "system",
+                    "comments": "system",
+                    "moved": false,
+                    "show": true
+                }]
+            },
+            mounted()
+            {
+                this.getLayout()
+            },
+            methods:
+            {
+                changelayout()
+                {
+
+                    if (this.change_layout == false)
+                    {
+                        this.click = 'pointer-events: none;'
+                        this.cl_bthstyle = 'mdi-widgets-outline'
+                        this.change_layout = true
+                    }
+                    else
+                    {
+                        this.click = ''
+                        this.cl_bthstyle = 'mdi-widgets'
+                        this.change_layout = false
+                        fs.writeFileSync(layoutPath, JSON.stringify(this.layout, null, 2))
+                    }
+                },
+                getLayout()
+                {
+                    var data = JSON.parse(fs.readFileSync(layoutPath, 'utf-8'))
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        if (data[i].show)
+                        {
+                            data[i].w = data[i].w_tmp,
+                            data[i].h = data[i].h_tmp
+                        }
+                        else
+                        {
+                            data[i].w = 0,
+                            data[i].h = 0
+                        }
+                    }
+                    this.layout = data
+                },
+                reset()
+                {
+                    ipcRenderer.send('reset', '')
+                },
+                settings()
+                {
+                    ipcRenderer.send('setting', '')
+                },
+                search()
+                {
+                    shell.openExternal(`https://cn.bing.com/search?q=${this.searchKey}`)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
