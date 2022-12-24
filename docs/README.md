@@ -3,6 +3,7 @@
 ## 目录
 
 - [背景](#背景)
+- [下载](#下载)
 - [使用](#使用)
 - [组件介绍](#组件介绍)
 - [其他](#其他)
@@ -10,6 +11,15 @@
 ## 背景
 
 ### DWidgets是一款桌面组件软件，因为Windows自带的小组件有点拉，所以决定自己做一个，布局参考[SwetyCore](https://github.com/SwetyCore)大佬的[VueWidgets](https://github.com/SwetyCore/VueWidgets)
+
+## 下载
+
+**Github :** https://github.com/Yixiaoshan/DWidgets/releases
+
+~~**Gitee :** https://gitee.com/bigbear871/DWidgets~~
+
+**百度网盘 :** 
+https://pan.baidu.com/s/1WvHf3gDwA6ImYu8RSh2xWw?pwd=1234 
 
 ## 使用
 
@@ -46,7 +56,7 @@
 |快捷控制|✔️|  
 |便签|✔️|  
 |硬盘&内存 占用显示|✔️|  
-|浏览器搜索框|✔️|  
+|Bing搜索框|✔️|  
 
 ### 时钟
 功能
@@ -119,7 +129,9 @@
 * 富文本编辑
 
 其他
-* 目前只能通过组件 [快捷控制](#快捷控制) 打开
+* 目前只能通过组件 [快捷控制](#快捷控制) 打开  
+
+![image](./readme/4.png)
 
 ### 内存/硬盘 数据显示
 功能
