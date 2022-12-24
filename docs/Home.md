@@ -19,7 +19,7 @@
 ### 工具栏
 使用快捷键 Alt + T 唤醒  
 
-![image](../assets/readme/3.png)  
+![image](./readme/3.png)  
 
 功能
 1. 移动窗体
@@ -29,7 +29,7 @@
 5. Bing搜索框
 
 ### 设置
-![image](./assets/readme/6.png)
+![image](./readme/6.png)
 
 ## 组件介绍
 以下是已实现的组件和后期可能会加入的组件
@@ -85,7 +85,7 @@
 其他
 * 点击音符图标可以选择音频文件
 
-![image](./assets/readme/1.png)
+![image](./readme/1.png)
 
 ### BiliBili用户小卡片
 功能
@@ -104,7 +104,7 @@
 * 右键点击卡片登录
 * 卡片背景图会随系统时间改变
 
-![image](./assets/readme/2.webp)
+![image](./readme/2.webp)
 
 ### 快捷控制
 功能
