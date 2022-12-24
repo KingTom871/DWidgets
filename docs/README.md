@@ -1,7 +1,5 @@
 # DWidgets
 
-theme:minima
-
 ## 目录
 
 - [背景](#背景)
