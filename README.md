@@ -7,9 +7,6 @@
 - [组件介绍](#组件介绍)
 - [其他](#其他)
 
-## 背景
-
-### DWidgets是一款桌面组件软件，因为Windows自带的小组件有点拉，所以决定自己做一个，布局参考[SwetyCore](https://github.com/SwetyCore)大佬的[VueWidgets](https://github.com/SwetyCore/VueWidgets)
 
 ## 使用
 
