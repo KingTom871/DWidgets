@@ -19,14 +19,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Yixiaoshan/Dwidgets.git"
+        "url": "git+https://github.com/KingTom871/Dwidgets.git"
     },
-    "author": "Yixiaoshan",
+    "author": "KingTom871",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/Yixiaoshan/Dwidgets/issues"
+        "url": "https://github.com/KingTom871/Dwidgets/issues"
     },
-    "homepage": "https://github.com/Yixiaoshan/Dwidgets#readme",
+    "homepage": "https://github.com/KingTom871/Dwidgets#readme",
     "devDependencies": {
         "electron": "^22.0.0",
         "electron-packager": "^17.1.1"
