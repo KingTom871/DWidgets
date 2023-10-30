@@ -1,4 +1,10 @@
-# DWidgets
+<div align="center">
+  <img src="./src/assets/favicon.png" width="120">
+  <h1>DWidgets</h1>
+  <p>经典的 DWidgets，有很多实用的小工具!</p>
+</div>
+
+---
 
 ## 目录
 
